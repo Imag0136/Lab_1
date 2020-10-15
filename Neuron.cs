@@ -35,7 +35,15 @@ namespace Lab0
             error = 0;
             for (int k = 0; k < 10; k++)
             {
-                img = k < 5 ? new Bitmap($"Крестик{k}.jpg") : new Bitmap($"Нолик{k}.jpg");
+                if (k < 10) img = new Bitmap($"Один{k}.jpg");
+                else if (k < 20) img = new Bitmap($"Два{k}.jpg");
+                else if (k < 30) img = new Bitmap($"Три{k}.jpg");
+                else if (k < 40) img = new Bitmap($"Четыре{k}.jpg");
+                else if (k < 50) img = new Bitmap($"Пять{k}.jpg");
+                else if (k < 60) img = new Bitmap($"Шесть{k}.jpg");
+                else if (k < 70) img = new Bitmap($"Семь{k}.jpg");
+                else if (k < 80) img = new Bitmap($"Восемь{k}.jpg");
+                else if (k < 90) img = new Bitmap($"Девять{k}.jpg");
                 y = Output(img) > limit ? 1 : 0;
                 yk = k < 5 ? 1 : 0;
                 if (y != yk)
