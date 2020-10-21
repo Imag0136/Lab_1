@@ -12,6 +12,7 @@ namespace Lab0
         Graphics g;
         Bitmap img;
         Neuron neuron = new Neuron();
+        public int incr = 0;
 
         public Form1()
         {
@@ -19,7 +20,7 @@ namespace Lab0
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             p.SetLineCap(System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.DashCap.Round);
 
-            neuron.Learn(img);
+            //neuron.Learn(img);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -40,7 +41,7 @@ namespace Lab0
             }
         }
 
-        private void openButton_Click(object sender, EventArgs e)
+        private void OpenButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files(*.BMP;*.JPG;*.PNG)|*.BMP;*.JPG;*.PNG";
@@ -56,12 +57,13 @@ namespace Lab0
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Image != null) //если в pictureBox есть изображение
             {
                 DateTime now = DateTime.Now;
-                //pictureBox1.Image.Save($"Девять{incr}.jpg");
+                pictureBox1.Image.Save($"{incr}.jpg");
+                incr += 1;
             }
         }
 

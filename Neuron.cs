@@ -9,8 +9,9 @@ namespace Lab0
         byte t = 0;
         byte error = 0;
         int limit = 0;
+        public double[][,] weightArray = new double[10][,];
         public int[,] imgArray; // матрица входов
-        public double[,] weightArray = new double[100, 100]; //матрица весовых коэффициентов
+        public double[,] weight = new double[100, 100]; //матрица весовых коэффициентов
         double alpha = 0.4; //Скорость обучения
         double delta;
         int y; //фактический результат
@@ -20,12 +21,16 @@ namespace Lab0
         {
             //Установление случайных весов
             Random rand = new Random((int)DateTime.Now.Ticks);
-            for (int i = 0; i < 100; i++)
+            for (int n = 0; n < 10; n++)
             {
-                for (int j = 0; j < 100; j++)
+                for (int i = 0; i < 100; i++)
                 {
-                    weightArray[i, j] = Convert.ToDouble(rand.Next(-3, 4) / 10.0);
+                    for (int j = 0; j < 100; j++)
+                    {
+                        weight[i, j] = Convert.ToDouble(rand.Next(-3, 4) / 10.0);
+                    }
                 }
+                weightArray[n] = weight;
             }
         }
 
@@ -33,27 +38,27 @@ namespace Lab0
         {
             t += 1;
             error = 0;
-            for (int k = 0; k < 10; k++)
+            double sum = 0;
+            int index = 0;
+            for (int k = 0; k < 100; k++)
             {
-                if (k > 79) img = new Bitmap($"Девять{k}.jpg");
-                else if (k > 69) img = new Bitmap($"Восемь{k}.jpg");
-                else if (k > 59) img = new Bitmap($"Семь{k}.jpg");
-                else if (k > 49) img = new Bitmap($"Шесть{k}.jpg");
-                else if (k > 39) img = new Bitmap($"Пять{k}.jpg");
-                else if (k > 29) img = new Bitmap($"Четыре{k}.jpg");
-                else if (k > 19) img = new Bitmap($"Три{k}.jpg");
-                else if (k > 9) img = new Bitmap($"Два{k}.jpg");
-                else  img = new Bitmap($"Один{k}.jpg");
-                y = Output(img) > limit ? 1 : 0;
-                yk = k < 5 ? 1 : 0;
-                if (y != yk)
+                img = new Bitmap($"{k}.jpg");
+                for (int n = 0; n < 10; n++)
+                {
+                    if (Output(n, img) > sum) index = n;
+                }
+                if (index != k / 10)
                 {
                     delta = yk - y;
                     for (int i = 0; i < img.Width; i++)
                     {
                         for (int j = 0; j < img.Height; j++)
                         {
-                            if (imgArray[i, j] == 1) weightArray[i, j] += alpha * delta;
+                            if (imgArray[i, j] == 1)
+                            {
+                                weightArray[index][i, j] += alpha * -1;
+                                weightArray[k / 10][i, j] += alpha;
+                            }
                         }
                     }
                     error = 1;
@@ -63,9 +68,10 @@ namespace Lab0
             else Console.WriteLine($"t = {t}");
         }
 
-        public double Output(Bitmap img)
+        public double Output(int n, Bitmap img)
         {
             double sum = 0; //сумма
+            
             imgArray = new int[100, 100];
             for (int i = 0; i < img.Width; i++)
             {
@@ -74,7 +80,7 @@ namespace Lab0
                     if (img.GetPixel(i, j) == Color.FromArgb(255, 0, 0, 0))
                     {
                         imgArray[i, j] = 1;
-                        sum += imgArray[i, j] * weightArray[i, j];
+                        sum += imgArray[i, j] * weightArray[n][i, j];
                     }
                 }
             }
@@ -83,8 +89,10 @@ namespace Lab0
 
         public void Recognize(Bitmap img)
         {
-            if (Output(img) > limit) MessageBox.Show("Это крестик");
-            else MessageBox.Show("Это нолик");
+            for (int n = 0; n < 10; n++)
+            {
+                if (Output(n, img) > limit) MessageBox.Show($"Это {n}");
+            }
         }
     }
 }
