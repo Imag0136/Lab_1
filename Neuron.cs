@@ -12,7 +12,7 @@ namespace Lab0
         public double[][,] weightArray = new double[10][,];
         public int[,] imgArray; // матрица входов
         public double[,] weight = new double[100, 100]; //матрица весовых коэффициентов
-        double alpha = 0.4; //Скорость обучения
+        double alpha = 0.7; //Скорость обучения
         double delta;
         int y; //фактический результат
         int yk; //ожидаемый результат
@@ -43,6 +43,7 @@ namespace Lab0
             for (int k = 0; k < 100; k++)
             {
                 img = new Bitmap($"{k}.jpg");
+                index = 0;
                 for (int n = 0; n < 10; n++)
                 {
                     if (Output(n, img) > sum) index = n;
@@ -57,7 +58,7 @@ namespace Lab0
                             if (imgArray[i, j] == 1)
                             {
                                 weightArray[index][i, j] += alpha * -1;
-                                weightArray[k / 10][i, j] += alpha;
+                                //weightArray[k / 10][i, j] += alpha;
                             }
                         }
                     }

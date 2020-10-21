@@ -20,7 +20,7 @@ namespace Lab0
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             p.SetLineCap(System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.DashCap.Round);
 
-            //neuron.Learn(img);
+            neuron.Learn(img);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
