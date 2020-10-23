@@ -50,30 +50,15 @@ namespace Lab0
                     delta = yk[n] - y[n];
                     if (delta != 0)
                     {
-                        for (int i = 0; i < img.Width; i++)
+                        for (int i = 0; i < imgArray.GetLength(0); i++)
                         {
-                            for (int j = 0; j < img.Height; j++)
+                            for (int j = 0; j < imgArray.GetLength(1); j++)
                             {
                                 weightArray[n][i, j] += alpha * delta;
                             }
                         }
+                        error = 1;
                     }
-                }
-                if (index != k / 10)
-                {
-                    delta = yk - y;
-                    for (int i = 0; i < imgArray.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < imgArray.GetLength(1); j++)
-                        {
-                            if (imgArray[i, j] == 1)
-                            {
-                                weightArray[index][i, j] += alpha * -1;
-                                //weightArray[k / 10][i, j] += alpha;
-                            }
-                        }
-                    }
-                    error = 1;
                 }
             }
             if (error == 1) Learn(img);
