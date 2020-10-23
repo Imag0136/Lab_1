@@ -38,19 +38,30 @@ namespace Lab0
         {
             t += 1;
             error = 0;
-            double sum = 0;
-            int index = 0;
+            int[] y = new int[10];
+            int[] yk = new int[10];
             for (int k = 0; k < 100; k++)
             {
                 img = new Bitmap($"{k}.jpg");
-                index = 0;
                 for (int n = 0; n < 10; n++)
                 {
-                    if (Output(n, img) > sum) index = n;
+                    y[n] = Output(n, img) > limit ? 1 : 0;
+                    yk[n] = k / 10 == n ? 1 : 0;
+                    delta = yk[n] - y[n];
+                    if (delta != 0)
+                    {
+                        for (int i = 0; i < img.Width; i++)
+                        {
+                            for (int j = 0; j < img.Height; j++)
+                            {
+                                weightArray[n][i, j] += alpha * delta;
+                            }
+                        }
+                    }
                 }
                 if (index != k / 10)
                 {
-                    delta = yk - y;
+                    //delta = yk - y;
                     for (int i = 0; i < img.Width; i++)
                     {
                         for (int j = 0; j < img.Height; j++)
