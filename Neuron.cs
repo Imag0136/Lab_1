@@ -34,10 +34,11 @@ namespace Lab0
             }
         }
 
-        public void Learn(Bitmap img)
+        public void Learn()
         {
             t += 1;
             error = 0;
+            Bitmap img;
             int[] y = new int[10];
             int[] yk = new int[10];
             for (int k = 0; k < 100; k++)
@@ -61,7 +62,7 @@ namespace Lab0
                     }
                 }
             }
-            if (error == 1) Learn(img);
+            if (error == 1) Learn();
             else Console.WriteLine($"t = {t}");
         }
 
@@ -91,14 +92,6 @@ namespace Lab0
             return sum;
         }
 
-        public void Recognize(Bitmap img)
-        {
-            for (int n = 0; n < 10; n++)
-            {
-                if (Output(n, img) > limit) MessageBox.Show($"Это {n}");
-            }
-        }
-
         // Пересчёт массива source в массив res, для приведения произвольного массива данных к массиву стандартных размеров.
         public static int[,] LeadArray(int[,] source, int[,] res)
         {
@@ -116,6 +109,13 @@ namespace Lab0
                     if (res[posX, posY] == 0) res[posX, posY] = source[n, m];
                 }
             return res;
+        }
+        public void Recognize(Bitmap img)
+        {
+            for (int n = 0; n < 10; n++)
+            {
+                if (Output(n, img) > limit) MessageBox.Show($"Это {n}");
+            }
         }
     }
 }
