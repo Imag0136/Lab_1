@@ -6,36 +6,32 @@ namespace Lab0
 {
     class Neuron
     {
-        int t = 0;
-        int error = 0;
+        byte t = 0;
+        byte error = 0;
         int limit = 0;
-        double sum = 0;
-        public double[][,] weightArray = new double[10][,];
+        public int[] imgArray; // матрица входов
+        public double[,] weight = new double[10, 10000]; //матрица весовых коэффициентов
+        double alpha = 0.4; //Скорость обучения
+        double delta;
+        int y; //фактический результат
+        int yk; //ожидаемый результат
+ 
+        //public double[][,] weightArray = new double[10][,];
         
-        public double[,] weight = new double[10, 10]; //матрица весовых коэффициентов
-
-        int[,] input = new int[100, 100];
-        int[,] imgArray = new int[10, 10]; // матрица входов
+        //public double[,] weight = new double[10, 10]; //матрица весовых коэффициентов
 
         Bitmap img;
-
-        double alpha = 0.5; //Скорость обучения
-        double delta;
 
         public Neuron()
         {
             //Установление случайных весов
             Random rand = new Random((int)DateTime.Now.Ticks);
-            for (int n = 0; n < 10; n++)
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
+                for (int j = 0; j < 10000; j++)
                 {
-                    for (int j = 0; j < 10; j++)
-                    {
-                        weight[i, j] = Convert.ToDouble(rand.Next(-3, 4) / 10.0);
-                    }
+                    weight[i, j] = Convert.ToDouble(rand.Next(-3, 4) / 10.0);
                 }
-                weightArray[n] = weight;
             }
         }
 
@@ -43,59 +39,37 @@ namespace Lab0
         {
             t += 1;
             error = 0;
-            int y; //фактический результат
-            int yk; //ожидаемый результат
             for (int k = 0; k < 100; k++)
             {
-                //img = new Bitmap($"{k}.jpg");
                 img = (Bitmap)Image.FromFile($"{k}.jpg");
-                for (int i = 0; i < img.Width; i++)
-                {
-                    for (int j = 0; j < img.Height; j++)
-                    {
-                        if (img.GetPixel(i, j) == Color.FromArgb(255, 0, 0, 0))
-                        {
-                            input[i, j] = 1;
-                        }
-                    }
-                }
-                // Уменьшение массива
-                for (var n = 0; n < imgArray.GetLength(0); n++)
-                    for (var m = 0; m < imgArray.GetLength(1); m++)
-                        imgArray[n, m] = 0;
 
-                var pX = (double)imgArray.GetLength(0) / (double)input.GetLength(0);
-                var pY = (double)imgArray.GetLength(1) / (double)input.GetLength(1);
+                // Уменьшение массива________________________________________________________
+                //for (var n = 0; n < imgArray.GetLength(0); n++)
+                //    for (var m = 0; m < imgArray.GetLength(1); m++)
+                //        imgArray[n, m] = 0;
 
-                for (var n = 0; n < input.GetLength(0); n++)
-                    for (var m = 0; m < input.GetLength(1); m++)
-                    {
-                        var posX = (int)(n * pX);
-                        var posY = (int)(m * pY);
-                        if (imgArray[posX, posY] == 0) imgArray[posX, posY] = input[n, m];
-                    }
+                //var pX = (double)imgArray.GetLength(0) / (double)input.GetLength(0);
+                //var pY = (double)imgArray.GetLength(1) / (double)input.GetLength(1);
+
+                //for (var n = 0; n < input.GetLength(0); n++)
+                //    for (var m = 0; m < input.GetLength(1); m++)
+                //    {
+                //        var posX = (int)(n * pX);
+                //        var posY = (int)(m * pY);
+                //        if (imgArray[posX, posY] == 0) imgArray[posX, posY] = input[n, m];
+                //    }
+                //__________________________________________________________________________
 
                 for (int n = 0; n < 10; n++)
                 {
-                    sum = 0;
-                    for (int i = 0; i < imgArray.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < imgArray.GetLength(1); j++)
-                        {
-                            sum += imgArray[i, j] * weightArray[n][i, j];
-                        }
-                    }
-                    y = sum > limit ? 1 : 0;
+                    y = Output(n, img) > limit ? 1 : 0;
                     yk = n == (k / 10) ? 1 : 0;
                     if (y != yk)
                     {
                         delta = yk - y;
-                        for (int i = 0; i < imgArray.GetLength(0); i++)
+                        for (int i = 0; i < 10000; i++)
                         {
-                            for (int j = 0; j < imgArray.GetLength(1); j++)
-                            {
-                                if (imgArray[i, j] == 1) weightArray[n][i, j] += alpha * delta;
-                            }
+                            if (imgArray[i] == 1) weight[n, i] += alpha * delta;
                         }
                         error++;
                     }
@@ -107,31 +81,25 @@ namespace Lab0
             else Console.WriteLine($"t = {t}");
         }
 
-        //public double Output(int n, Bitmap img)
-        //{
-        //    double sum = 0; //сумма
-        //    int[,] input = new int[100, 100];
-        //    imgArray = new int[10, 10];
-        //    for (int i = 0; i < img.Width; i++)
-        //    {
-        //        for (int j = 0; j < img.Height; j++)
-        //        {
-        //            if (img.GetPixel(i, j) == Color.FromArgb(255, 0, 0, 0))
-        //            {
-        //                input[i, j] = 1;                        
-        //            }
-        //        }
-        //    }
-        //    LeadArray(input, imgArray);
-        //    for (int i = 0; i < imgArray.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < imgArray.GetLength(1); j++)
-        //        {
-        //            sum += imgArray[i, j] * weightArray[n][i, j];
-        //        }
-        //    }
-        //    return sum;
-        //}
+        public double Output(int n, Bitmap img)
+        {
+            double sum = 0; //сумма
+            int t = 0;
+            imgArray = new int[10000];
+            for (int i = 0; i < img.Width; i++)
+            {
+                for (int j = 0; j < img.Height; j++)
+                {
+                    if (img.GetPixel(i, j) == Color.FromArgb(255, 0, 0, 0))
+                    {
+                        imgArray[t] = 1;
+                        sum += imgArray[t] * weight[n, t];
+                    }
+                    t++;
+                }
+            }
+            return sum;
+        }
 
         // Пересчёт массива source в массив res, для приведения произвольного массива данных к массиву стандартных размеров.
         //public static int[,] LeadArray(int[,] source, int[,] res)
