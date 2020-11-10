@@ -6,7 +6,7 @@ namespace Lab0
 {
     class Neuron
     {
-        byte t = 0;
+        byte t = 0; //номер эпохи
         byte error = 0;
         int limit = 0;
         public int[] imgArray; // матрица входов
@@ -36,7 +36,7 @@ namespace Lab0
             error = 0;
             for (int k = 0; k < 100; k++)
             {
-                img = (Bitmap)Image.FromFile($"{k}.jpg");
+                img = (Bitmap)Image.FromFile($"../../Resources/{k}.jpg");
                 for (int n = 0; n < 10; n++)
                 {
                     y = Output(n, img) > limit ? 1 : 0;
