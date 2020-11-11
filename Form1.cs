@@ -12,8 +12,7 @@ namespace Lab0
         Graphics g;
         Bitmap img;
         Neuron neuron = new Neuron();
-        public int incr = 70;
-
+        public int incr = 0;
         public Form1()
         {
             InitializeComponent();
