@@ -9,8 +9,8 @@ namespace Lab0
         byte t = 0; //номер эпохи
         byte error = 0;
         int limit = 0;
-        public double[,] weight = new double[10, 100]; //матрица весовых коэффициентов
-        public int[] input = new int[100];
+        double[,] weight = new double[10, 100]; //матрица весовых коэффициентов
+        int[] input = new int[100];
         double alpha = 0.3; //Скорость обучения
         double delta;
         int y; //фактический результат
@@ -39,7 +39,7 @@ namespace Lab0
                 img = (Bitmap)Image.FromFile($"../../Resources/{k}.jpg");
                 for (int n = 0; n < 10; n++)
                 {
-                    y = Output(n, img) > limit ? 1 : 0;
+                    y = Sum(n, img) > limit ? 1 : 0;
                     yk = n == (k / 5) ? 1 : 0;
                     if (y != yk)
                     {
@@ -57,7 +57,7 @@ namespace Lab0
             if (error > 0) Learn();
         }
 
-        public double Output(int n, Bitmap img)
+        public double Sum(int n, Bitmap img)
         {
             double sum = 0; //сумма
             int [,] imgArray = new int[img.Width, img.Height]; //матрица входов
@@ -68,30 +68,6 @@ namespace Lab0
                 sum += input[i] * weight[n, i];
             }
             return sum;
-
-            //for (int i = 0; i < img.Width; i++)
-            //{
-            //    for (int j = 0; j < img.Height; j++)
-            //    {
-            //        if (img.GetPixel(i, j) == Color.FromArgb(255, 0, 0, 0))
-            //        {
-            //            imgArray[i, j] = 1;                        
-            //        }
-            //    }  
-
-            //for (int i = 0; i < img.Width; i++)
-            //{
-            //    for (int j = 0; j < img.Height; j++)
-            //    {
-            //        if (img.GetPixel(i, j) == Color.FromArgb(255, 0, 0, 0))
-            //        {
-            //            imgArray[t] = 1;
-            //            sum += imgArray[t] * weight[n, t];
-            //        }
-            //        t++;
-            //    }
-            //}
-            //return sum;
         }
 
         // Процедура обрезание рисунка по краям и преобразование в массив.
@@ -135,7 +111,7 @@ namespace Lab0
             return res;
         }
 
-        // Пересчёт массива source в массив res, для приведения произвольного массива данных к массиву стандартных размеров.
+        // Пересчёт матрицы source в массив res, для приведения произвольного массива данных к массиву стандартных размеров.
         public void LeadArray(int[,] source, int[] ans)
         {
             int[,] res = new int[10,10];
@@ -166,12 +142,16 @@ namespace Lab0
         {
             for (int n = 0; n < 10; n++)
             {
-                if (Output(n, img) > limit)
+                if (Sum(n, img) > limit)
                 {
                     MessageBox.Show($"Это {n}");
                     break;
                 }
-            }
+                else if (n == 9)
+                {
+                    MessageBox.Show($"Не знаю ( ╯°□°)╯ ┻━━┻");
+                }
+            };
         }
 
     }
