@@ -12,7 +12,7 @@ namespace Lab0
         int limit = 0;
         double[,] weight = new double[10, 100]; //матрица весовых коэффициентов
         int[] input = new int[100];
-        double alpha = 0.3; //Скорость обучения
+        double alpha = 0.4; //Скорость обучения
         double delta;
         int y; //фактический результат
         int yk; //ожидаемый результат
