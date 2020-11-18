@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Lab0
@@ -32,29 +33,34 @@ namespace Lab0
 
         public void Learn()
         {
-            t += 1;
-            error = 0;
-            for (int k = 0; k < 50; k++)
+            if (File.Exists(@"../../Resources/weight.txt")) LoadWeight();
+            else
             {
-                img = (Bitmap)Image.FromFile($"../../Resources/{k}.jpg");
-                for (int n = 0; n < 10; n++)
+                t += 1;
+                error = 0;
+                for (int k = 0; k < 50; k++)
                 {
-                    y = Sum(n, img) > limit ? 1 : 0;
-                    yk = n == (k / 5) ? 1 : 0;
-                    if (y != yk)
+                    img = (Bitmap)Image.FromFile($"../../Resources/{k}.jpg");
+                    for (int n = 0; n < 10; n++)
                     {
-                        delta = yk - y;
-                        for (int i = 0; i < 100; i++)
+                        y = Sum(n, img) > limit ? 1 : 0;
+                        yk = n == (k / 5) ? 1 : 0;
+                        if (y != yk)
                         {
-                            if (input[i] == 1) weight[n, i] += alpha * delta;
+                            delta = yk - y;
+                            for (int i = 0; i < 100; i++)
+                            {
+                                if (input[i] == 1) weight[n, i] += alpha * delta;
+                            }
+                            error++;
                         }
-                        error++;
                     }
                 }
+                Console.WriteLine($"t = {t}");
+                Console.WriteLine($"error = {error}");
+                if (error > 0) Learn();
+                SaveWeight();
             }
-            Console.WriteLine($"t = {t}");
-            Console.WriteLine($"error = {error}");
-            if (error > 0) Learn();
         }
 
         public double Sum(int n, Bitmap img)
@@ -138,6 +144,31 @@ namespace Lab0
             }
         }
 
+        public void SaveWeight()
+        {
+            StreamWriter sw = new StreamWriter(@"../../Resources/weight.txt");
+            for (int i = 0; i < weight.GetLength(0); i++)
+            {
+                for (int j = 0; j < weight.GetLength(1); j++)
+                {
+                    sw.WriteLine(weight[i, j].ToString());
+                }
+            }
+            sw.Close();
+        }
+
+        public void LoadWeight()
+        {
+            var sr = new StreamReader(@"../../Resources/weight.txt");
+            for (int i = 0; i < weight.GetLength(0); i++)
+            {
+                for (int j = 0; j < weight.GetLength(1); j++)
+                {
+                    weight[i, j] = Convert.ToDouble(sr.ReadLine());
+                }
+            }
+            sr.Close();
+        }
         public void Recognize(Bitmap img)
         {
             for (int n = 0; n < 10; n++)

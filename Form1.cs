@@ -40,7 +40,7 @@ namespace Lab0
             }
         }
 
-        private void OpenButton_Click(object sender, EventArgs e)
+        private void LoadWeight_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files(*.BMP;*.JPG;*.PNG)|*.BMP;*.JPG;*.PNG";
