@@ -67,7 +67,6 @@ namespace Lab0
         {
             double sum = 0; //сумма
             int [,] imgArray = new int[img.Width, img.Height]; //матрица входов
-
             LeadArray(CutImage(img, new Point(img.Width, img.Height)), input);
             for (int i = 0; i < 100; i++)
             {
