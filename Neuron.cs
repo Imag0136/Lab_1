@@ -66,7 +66,7 @@ namespace Lab0
         public double Sum(int n, Bitmap img)
         {
             double sum = 0; //сумма
-            int [,] imgArray = new int[img.Width, img.Height]; //матрица входов
+            int[,] imgArray = new int[img.Width, img.Height]; //матрица входов
             LeadArray(CutImage(img, new Point(img.Width, img.Height)), input);
             for (int i = 0; i < 100; i++)
             {
@@ -119,7 +119,7 @@ namespace Lab0
         // Пересчёт матрицы source в массив res, для приведения произвольного массива данных к массиву стандартных размеров.
         public void LeadArray(int[,] source, int[] ans)
         {
-            int[,] res = new int[10,10];
+            int[,] res = new int[10, 10];
             byte k = 0;
             for (var n = 0; n < res.GetLength(0); n++)
                 for (var m = 0; m < res.GetLength(1); m++) res[n, m] = 0;
